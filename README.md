@@ -1,1 +1,1 @@
-# tello_tracking_face
+# Tutorial using this project
