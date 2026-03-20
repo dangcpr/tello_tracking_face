@@ -26,17 +26,19 @@ class FaceTracker:
 
         if len(myFaceListArea) != 0:
             i = myFaceListArea.index(max(myFaceListArea))
-            return img, [myFaceListC[i], myFaceListArea[i]]
+            print(myFaceListC[i], myFaceListArea[i])
+            return [myFaceListC[i], myFaceListArea[i]]
         else:
-            return img, [[0, 0], 0]
+            return [[0, 0], 0]
         
     """Not yet tested"""
-    def trackFace(self, info, w, tello_controller: Tello): 
+    def trackFace(self, info, w, h, tello_controller: Tello): 
         x, y = info[0]
         area = info[1]
 
         fb = 0
         yaw = 0
+        up = 0
 
         # LEFT / RIGHT
         if x < w//2 - 30:
@@ -46,17 +48,26 @@ class FaceTracker:
         else:
             yaw = 0
 
+        # UP / DOWN
+        if y < h//2 - 20:
+            up = 20
+        elif y > h//2 + 20:
+            up = -20
+        else:
+            up = 0
+
         # FORWARD / BACKWARD
-        if area > 8000:
+        if area > 100000:
             fb = -20
-        elif area < 5000 and area != 0:
+        elif area < 50000 and area != 0:
             fb = 20
         else:
             fb = 0
 
         # KHÔNG THẤY MẶT
-        if x == 0:
+        if x == 0 or area == 0:
             yaw = 0
             fb = 0
+            up = 0
 
-        tello_controller.send_rc_control(0, fb, 0, yaw)
+        tello_controller.send_rc_control(0, fb, up, yaw)

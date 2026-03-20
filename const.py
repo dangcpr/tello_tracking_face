@@ -8,3 +8,5 @@ MOVE_CLOCKWISE = "clockwise"
 MOVE_COUNTER_CLOCKWISE = "counter_clockwise"
 TAKEOFF = "takeoff"
 LAND = "land"
+SCREEN_WIDTH = 640
+SCREEN_HEIGHT = 480

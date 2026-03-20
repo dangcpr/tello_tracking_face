@@ -73,6 +73,7 @@ def on_key_press(key):
 def open_camera():
     """Open the drone's camera stream."""
     tello_controller.streamon()
+    print("tello battery:", tello_controller.get_battery())
     frame_read = tello_controller.get_frame_read()
 
     print("Camera initialized. Press keys to control:")
@@ -84,8 +85,10 @@ def open_camera():
     while True:
         frame = frame_read.frame
         
-        face_tracker.findFace(frame, cv2)
-
+        info = face_tracker.findFace(frame, cv2)
+        face_tracker.trackFace(info, const.SCREEN_WIDTH, const.SCREEN_HEIGHT, tello_controller)
+    
+        cv2.resize(frame, (const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
         cv2.imshow("Tello Camera", frame)
 
         key = cv2.waitKey(1) & 0xFF
